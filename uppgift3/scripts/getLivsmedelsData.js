@@ -33,10 +33,14 @@ var searchRequest = function(url) {
                 	+ livsmedel.fett + '</td></tr>';
                 tbody.innerHTML += livsmedel;
             }
-            if (livsmedelArray.length > 0) {
-            	table.style.visibility = "visible";
-            } else table.style.visibility = "hidden";
+            setTableVisibility(livsmedelArray.length);
         }
     });
+}
+
+var setTableVisibility = function(length) {
+	if (length > 0) {
+    	table.style.visibility = "visible";
+    } else table.style.visibility = "hidden";
 }
 

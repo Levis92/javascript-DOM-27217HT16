@@ -1,16 +1,19 @@
 var url = 'https://webservice.informatik.umu.se/webservice_livsmedel/getlivsmedel.php';
 var sokOrd;
-
-$("#tabell").hide();
+var tbody;
+var table;
 
 document.addEventListener('DOMContentLoaded', function(event) {
 	var sokButton = document.getElementById('sok-button');
 	sokButton.setAttribute('onclick', 'search()');
 	sokOrd = document.getElementById('livsmedelsSokOrd');
+	table = document.getElementById('tabell');
+	tbody = document.getElementById('tabell').getElementsByTagName('tbody')[0];
+	table.style.visibility = "hidden";
 });
 
 var search = function() {
-	document.getElementById('tabell').getElementsByTagName('tbody')[0].innerHTML = "";
+	tbody.innerHTML = "";
 	var query = sokOrd.value;
 	var searchQuery = url + '?namn=' + query + '&callback=getLivsmedel';
 	searchRequest(searchQuery);
@@ -22,19 +25,17 @@ var searchRequest = function(url) {
         dataType: "jsonp",
         
         success: function (response) {
-        	console.log(sokOrd.value)
             var livsmedelArray = response.livsmedel;
-            console.log(livsmedelArray)
             for(var i=0; i < livsmedelArray.length; i++) {
                 var livsmedel = livsmedelArray[i];
                 livsmedel = '<tr><td>' + livsmedel.namn + '</td><td>' + livsmedel.energi + '</td><td>' 
                 	+ livsmedel.kolhydrater + '</td><td>' + livsmedel.protein + '</td><td>' 
                 	+ livsmedel.fett + '</td></tr>';
-                $('#tabell tbody').append(livsmedel);
+                tbody.innerHTML += livsmedel;
             }
             if (livsmedelArray.length > 0) {
-            	$("#tabell").show();
-            } else $("#tabell").hide();
+            	table.style.visibility = "visible";
+            } else table.style.visibility = "hidden";
         }
     });
 }
